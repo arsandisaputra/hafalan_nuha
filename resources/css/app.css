@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base, theme, components, utilities;
+
+@layer theme {
+    :root {
+        /* Tier 1 & Tier 2 Design Tokens */
+        --bg-paper-light: #FAF8F5;
+        --bg-paper-dark: #0F172A;
+        --surface-light: #FFFFFF;
+        --surface-dark: #1E293B;
+        --text-primary-light: #1E293B;
+        --text-primary-dark: #F1F5F9;
+        --text-muted-light: #64748B;
+        --text-muted-dark: #94A3B8;
+        --border-subtle-light: #E5DEC9;
+        --border-subtle-dark: #334155;
+        --brand-accent-light: #059669;
+        --brand-accent-dark: #34D399;
+
+        /* Fallback tokens for older browsers without light-dark() */
+        --canvas-bg: var(--bg-paper-light);
+        --surface-bg: var(--surface-light);
+        --text-primary: var(--text-primary-light);
+        --text-muted: var(--text-muted-light);
+        --border-subtle: var(--border-subtle-light);
+        --accent-color: var(--brand-accent-light);
+        --scrollbar-track: #EFECE6;
+        --scrollbar-thumb: #C5BCA8;
+
+        @media (prefers-color-scheme: dark) {
+            --canvas-bg: var(--bg-paper-dark);
+            --surface-bg: var(--surface-dark);
+            --text-primary: var(--text-primary-dark);
+            --text-muted: var(--text-muted-dark);
+            --border-subtle: var(--border-subtle-dark);
+            --accent-color: var(--brand-accent-dark);
+            --scrollbar-track: #0F172A;
+            --scrollbar-thumb: #475569;
+        }
+
+        @supports (color: light-dark(white, black)) {
+            --canvas-bg: light-dark(var(--bg-paper-light), var(--bg-paper-dark));
+            --surface-bg: light-dark(var(--surface-light), var(--surface-dark));
+            --text-primary: light-dark(var(--text-primary-light), var(--text-primary-dark));
+            --text-muted: light-dark(var(--text-muted-light), var(--text-muted-dark));
+            --border-subtle: light-dark(var(--border-subtle-light), var(--border-subtle-dark));
+            --accent-color: light-dark(var(--brand-accent-light), var(--brand-accent-dark));
+            --scrollbar-track: light-dark(#EFECE6, #0F172A);
+            --scrollbar-thumb: light-dark(#C5BCA8, #475569);
+        }
+
+        /* Mandatory viewport-wide color-scheme adaptation */
+        color-scheme: light dark;
+        accent-color: var(--accent-color);
+        scrollbar-width: thin;
+        scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+        --arabic-font-size: 2rem;
+    }
+
+    html.dark {
+        color-scheme: dark;
+    }
+
+    html.light {
+        color-scheme: light;
+    }
+}
+
+@layer base {
+    body {
+        background-color: var(--canvas-bg);
+        color: var(--text-primary);
+        font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+        text-rendering: optimizeLegibility;
+    }
+
+    /* Accessible Focus Rings */
+    :focus-visible {
+        outline: 2px solid var(--accent-color);
+        outline-offset: 2px;
+    }
+
+    /* Minimum 24x24 CSS px touch targets (WCAG 2.5.8 AA) */
+    button,
+    select,
+    a.interactive-pill,
+    input[type="range"] {
+        min-block-size: 24px;
+        min-inline-size: 24px;
+    }
+
+    @media (pointer: coarse) {
+        button,
+        select,
+        a.interactive-pill {
+            min-block-size: 36px;
+            min-inline-size: 36px;
+        }
+    }
+
+    /* Inert background styling when mobile drawer is open */
+    [inert],
+    [inert] * {
+        opacity: 0.5;
+        cursor: default;
+        user-select: none;
+    }
+}
+
+@layer components {
+    .arabic-verse {
+        font-family: "Scheherazade New", "Amiri", serif;
+        font-size: var(--arabic-font-size, 2rem);
+        line-height: 2.35;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .recall-blur {
+        filter: blur(8px);
+        opacity: 0.38;
+        transition: filter 0.22s ease, opacity 0.22s ease;
+    }
+
+    .recall-unblurred {
+        filter: blur(0);
+        opacity: 1;
+    }
+
+    dialog::backdrop {
+        background: rgba(15, 23, 42, 0.55);
+        backdrop-filter: blur(2px);
+    }
+}
